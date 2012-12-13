@@ -1,5 +1,5 @@
-CFLAGS=-Wall -Werror -std=c99 -g -fPIC -Ilibuv/include -I/usr/include -D_XOPEN_SOURCE=700 -DLUV_STACK_CHECK -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64
-LIBS=-lm -lrt -lpam
+CFLAGS=-Wall -Werror -std=c99 -g -fPIC -I/usr/include/lua5.2 -D_XOPEN_SOURCE=700
+LIBS=-lpam
 
 all: pam.so pam_util.so
 
