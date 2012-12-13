@@ -65,7 +65,7 @@ static int lua_conversation(int num_msg, const struct pam_message **msg, struct 
 		}
 		else {
 			lua_settop(L, base);
-			lua_pushstring(L, "(Received no response)");
+			lua_pushstring(L, "Unknown error");
 		}
 
 		return PAM_CONV_ERR;
