@@ -125,12 +125,30 @@ static int lua_pam_start(lua_State *L) {
 	lua_pushvalue(L, 3);
 	lua_settable(L, LUA_REGISTRYINDEX);
 
+	int lret_base = lua_gettop(L);
+
 	pam_handle_t *pamh = NULL;
 	int err = pam_start(service_name, user, pam_conversation, &pamh);
 	if (err != PAM_SUCCESS) {
 		const char *errstr = pam_strerror(pamh, err);
 		lua_pushnil(L);
 		lua_pushstring(L, errstr);
+
+		/* Conversation errors usually leave more detailed descriptions on the stack */
+		int nresults = lua_gettop(L) - lret_base;
+		if (nresults != 0) {
+			if (nresults != 1) {
+				return luaL_error(L, "Expected 1 error message from conversation function, received %d", nresults);
+			}
+			else if (!lua_isstring(L, lret_base)) {
+				return luaL_error(L, "Error message from conversation function should be a string");
+			}
+
+			lua_pushstring(L, ": ");
+			lua_pushvalue(L, lret_base);
+			lua_concat(L, 3);
+		}
+
 		return 2;
 	}
 
@@ -172,18 +190,26 @@ static int lua_pam_authenticate(lua_State *L) {
 		}
 	}
 
+	int lret_base = lua_gettop(L);
 	int err = pam_authenticate(pamh, flags);
 	if (err != PAM_SUCCESS) {
 		const char *errstr = pam_strerror(pamh, err);
 		lua_pushnil(L);
+		lua_pushstring(L, errstr);
 
 		/* Conversation errors usually leave more detailed descriptions on the stack */
-		if (err == PAM_CONV_ERR && lua_isstring(L, -2)) {
-			const char *lerrstr = lua_tostring(L, -2);
-			lua_pushfstring(L, "%s: %s", errstr, lerrstr);
-		}
-		else {
-			lua_pushstring(L, errstr);
+		int nresults = lua_gettop(L) - lret_base;
+		if (nresults != 0) {
+			if (nresults != 1) {
+				return luaL_error(L, "Expected 1 error message from conversation function, received %d", nresults);
+			}
+			else if (!lua_isstring(L, lret_base)) {
+				return luaL_error(L, "Error message from conversation function should be a string");
+			}
+
+			lua_pushstring(L, ": ");
+			lua_pushvalue(L, lret_base);
+			lua_concat(L, 3);
 		}
 
 		return 2;
