@@ -83,16 +83,17 @@ static int lua_conversation(int num_msg, const struct pam_message **msg, struct 
 		int response = lua_gettop(L);
 
 		luaX_checktype(L, response, "responses[i]", LUA_TTABLE);
-		lua_rawgeti(L, response, 1);
-		lua_rawgeti(L, response, 2);
 
-		const char *_resp = luaX_checkstring(L, -2, "responses[i].resp");
+		lua_rawgeti(L, response, 1);
+		const char *_resp = luaX_checkstring(L, -1, "responses[i].resp");
 		(*resp)[i].resp = strdup(_resp);
+
+		lua_rawgeti(L, response, 2);
 		(*resp)[i].resp_retcode = luaX_checkinteger(L, -1, "responses[i].resp_retcode");
 
 		num_res++;
 
-		lua_pop(L, 1);
+		lua_pop(L, 3);
 	}
 
 	return PAM_SUCCESS;
