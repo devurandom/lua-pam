@@ -7,10 +7,7 @@ pam.o: pam.c lextlib/lextlib.h
 pam.so: pam.o lextlib/lextlib.o
 
 pam_util.o: pam_util.c lextlib/lextlib.h
-pam_util.so: pam_util.o lextlib/lextlib.o term_util/term_util.o
-
-#term_util/term_util.a: term_util
-#	$(MAKE) $(MAKEFLAGS) -C term_util term_util.a
+pam_util.so: pam_util.o lextlib/lextlib.o lua-term/term.o
 
 clean:
 	$(RM) *.so *.o
