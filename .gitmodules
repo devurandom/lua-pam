@@ -1,6 +1,3 @@
-[submodule "term_util"]
-	path = term_util
-	url = https://github.com/devurandom/lua-term-util.git
 [submodule "lextlib"]
 	path = lextlib
 	url = https://github.com/devurandom/lextlib.git
