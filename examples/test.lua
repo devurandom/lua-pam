@@ -1,8 +1,10 @@
-package.cpath = package.cpath .. ";./?/?.so"
+#!/usr/bin/lua
+
+package.cpath = package.cpath .. ";lua-?/?.so"
 
 local pam = require "pam"
 local pam_util = require "pam_util"
-local cutil = require "cutil"
+local term = require "term"
 
 local function conversation(t)
 	local resp = {}
