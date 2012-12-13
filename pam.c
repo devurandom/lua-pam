@@ -77,7 +77,9 @@ static int lua_conversation(int num_msg, const struct pam_message **msg, struct 
 	lua_pushnil(L);
 	for (int i = 0; i < num_msg; i++) {
 		if (lua_next(L, responses) == 0) {
+			lua_settop(L, base);
 			lua_pushfstring(L, "Number of responses (%d) does not match number of messages (%d)", num_res, num_msg);
+
 			return PAM_CONV_ERR;
 		}
 		int response = lua_gettop(L);
@@ -95,6 +97,8 @@ static int lua_conversation(int num_msg, const struct pam_message **msg, struct 
 
 		lua_pop(L, 3);
 	}
+
+	lua_settop(L, base);
 
 	return PAM_SUCCESS;
 }
