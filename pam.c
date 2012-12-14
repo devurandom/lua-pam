@@ -266,23 +266,23 @@ static const luaL_Reg lua_pam_lib[] = {
 	{ "endx", lua_pam_end },
 
 	{ "authenticate", lua_pam_authenticate },
-	{ "setcred", lua_pam_notimplemented },
+	{ "setcred", NULL },
 
-	{ "acct_mgmt", lua_pam_notimplemented },
+	{ "acct_mgmt", NULL },
 
-	{ "chauthtok", lua_pam_notimplemented },
+	{ "chauthtok", NULL },
 
-	{ "open_session", lua_pam_notimplemented },
+	{ "open_session", NULL },
 
 	{ "set_item", lua_pam_set_item },
-	{ "get_item", lua_pam_notimplemented },
-	{ "get_user", lua_pam_notimplemented },
-	{ "set_data", lua_pam_notimplemented },
-	{ "get_data", lua_pam_notimplemented },
+	{ "get_item", NULL },
+	{ "get_user", NULL },
+	{ "set_data", NULL },
+	{ "get_data", NULL },
 
-	{ "putenv", lua_pam_notimplemented },
-	{ "getenv", lua_pam_notimplemented },
-	{ "getenvlist", lua_pam_notimplemented },
+	{ "putenv", NULL },
+	{ "getenv", NULL },
+	{ "getenvlist", NULL },
 
 	{ "strerror", lua_pam_strerror },
 
