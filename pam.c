@@ -185,7 +185,7 @@ static int lua_pam_authenticate(lua_State *L) {
 
 		lua_pushnil(L);
 		while (lua_next(L, 2) != 0) {
-			flags |= lua_tointeger(L, -1); // FIXME: I don't think this works with Lua...
+			flags |= lua_tointeger(L, -1); /* FIXME: I don't think this works with Lua... */
 			lua_pop(L, 1);
 		}
 	}
