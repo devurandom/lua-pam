@@ -308,10 +308,15 @@ static const luaL_Reg lua_pam_handle_t_lib[] = {
 
 int luaopen_pam(lua_State *L) {
 	luaL_newmetatable(L, L_PAM_HANDLE_T);
+	int metatable = lua_gettop(L);
+
 	luaL_setfuncs(L, lua_pam_handle_t_lib, 0);
 
 	luaL_newlib(L, lua_pam_lib);
 	int pam = lua_gettop(L);
+
+	lua_pushvalue(L, pam);
+	lua_setfield(L, metatable, "__index");
 
 	/* Error codes */
 	luaX_setconst(L, pam, PAM_ABORT);
