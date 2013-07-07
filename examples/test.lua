@@ -14,9 +14,9 @@ local function conversation(t)
 
 		if k == pam.PAM_PROMPT_ECHO_OFF then
 			io.write(v)
-			cutil.echo_off()
+			term.echo_off()
 			resp[i] = {io.read(), 0}
-			cutil.echo_on()
+			term.echo_on()
 		elseif k == pam.PAM_PROMPT_ECHO_ON then
 			io.write(v)
 			resp[i] = {io.read(), 0}
