@@ -3,48 +3,44 @@
 package.cpath = package.cpath .. ";lua-?/?.so"
 
 local pam = require "pam"
-local pam_util = require "pam_util"
 local term = require "term"
 
-local function conversation(t)
-	local resp = {}
+local function conversation(messages)
+	local responses = {}
 
-	for i,m in ipairs(t) do
-		local k, v = m[1], m[2]
+	for i, message in ipairs(messages) do
+		local msg_style, msg = message[1], message[2]
 
-		if k == pam.PAM_PROMPT_ECHO_OFF then
-			io.write(v)
+		if msg_style == pam.PROMPT_ECHO_OFF then
+			-- Assume PAM asks us for the password
+			io.write(msg)
 			term.echo_off()
-			resp[i] = {io.read(), 0}
+			responses[i] = {io.read(), 0}
 			term.echo_on()
-		elseif k == pam.PAM_PROMPT_ECHO_ON then
-			io.write(v)
-			resp[i] = {io.read(), 0}
-		elseif k == pam.PAM_ERROR_MSG then
+		elseif msg_style == pam.PROMPT_ECHO_ON then
+			-- Assume PAM asks us for the username
+			io.write(msg)
+			responses[i] = {io.read(), 0}
+		elseif msg_style == pam.ERROR_MSG then
 			io.write("ERROR: ")
-			io.write(v)
+			io.write(msg)
 			io.write("\n")
-			resp[i] = {"", 0}
-		elseif k == pam.PAM_TEXT_INFO then
-			io.write(v)
+			responses[i] = {"", 0}
+		elseif msg_style == pam.TEXT_INFO then
+			io.write(msg)
 			io.write("\n")
-			resp[i] = {"", 0}
+			responses[i] = {"", 0}
 		else
-			error("Unsupported conversation message type")
+			error("Unsupported conversation message style: " .. msg_style)
 		end
 	end
 
-	return resp
+	return responses
 end
 
-local h, err = pam.start("system-auth", "test", {pam_util.conversation, nil})
+local h, err = pam.start("system-auth", nil, {conversation, nil})
 if not h then
 	print("Start error:", err)
-end
-
-local i, err = pam.set_item(h, pam.PAM_AUTHTOK, "test")
-if not i then
-	print("Item error:", err)
 end
 
 local a, err = pam.authenticate(h)
@@ -52,7 +48,7 @@ if not a then
 	print("Authenticate error:", err)
 end
 
-local e, err = pam.endx(h, pam.PAM_SUCCESS)
+local e, err = pam.endx(h, pam.SUCCESS)
 if not e then
 	print("End error:", err)
 end

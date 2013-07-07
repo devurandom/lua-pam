@@ -20,13 +20,10 @@ LDFLAGS=-Wl,--no-undefined $(LUA_LDFLAGS)
 LIBS=$(LUA_LIBS) -lpam
 
 .PHONY: all
-all: pam.so pam_util.so
+all: pam.so
 
 pam.o: pam.c lextlib/lextlib.h
 pam.so: pam.o lextlib/lextlib.o
-
-pam_util.o: pam_util.c lextlib/lextlib.h
-pam_util.so: pam_util.o lextlib/lextlib.o lua-term/term.o
 
 .PHONY: clean
 clean:
