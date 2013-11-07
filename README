@@ -1,0 +1,6 @@
+== Example ==
+
+For the minimal commandline example you will need lua-term [1].
+Put it in the working directory when you try to run the example.
+
+[1] https://github.com/devurandom/lua-term
