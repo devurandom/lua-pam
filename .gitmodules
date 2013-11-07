@@ -1,6 +1,3 @@
 [submodule "lextlib"]
 	path = lextlib
 	url = https://github.com/devurandom/lextlib.git
-[submodule "lua-term"]
-	path = lua-term
-	url = https://github.com/devurandom/lua-term.git
