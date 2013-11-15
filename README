@@ -1,3 +1,17 @@
+== Build ==
+
+To build against the default Lua version 5.2, just run:
+  make
+
+Distributions like Ubuntu allow you to build against several versions of Lua. To select e.g. 5.1, run:
+  make LUA_VERSION=5.1
+
+If your system does not have multiple versions of Lua available (e.g. Gentoo), try this while omitting the version number:
+  make LUA_VERSION=
+
+If these do not fit you, you can configure CFLAGS and LIBS instead:
+  make LUA_CFLAGS=-I... LUA_LIBS=-l...
+
 == Example ==
 
 For the minimal commandline example you will need lua-term [1].
