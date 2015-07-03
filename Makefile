@@ -14,9 +14,16 @@ ifneq ($(DEBUG),)
 EXTRA_CFLAGS+= -g -O0
 endif
 
+UNAME := $(shell uname)
+ifeq ($(UNAME), Darwin)
+NO_UNDEFINED = -undefined,error
+else
+NO_UNDEFINED = --no-undefined
+endif
+
 CFLAGS=-Wall -Werror -pedantic -std=c99 -fPIC -D_XOPEN_SOURCE=700 $(EXTRA_CFLAGS)
 CPPFLAGS=$(LUA_CPPFLAGS)
-LDFLAGS=-Wl,--no-undefined $(LUA_LDFLAGS)
+LDFLAGS=-Wl,$(NO_UNDEFINED) $(LUA_LDFLAGS)
 LIBS=$(LUA_LIBS) -lpam
 
 .PHONY: all

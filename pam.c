@@ -1,4 +1,4 @@
-#include <malloc.h>
+#include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
 #include <assert.h>
@@ -6,7 +6,9 @@
 
 #include <security/pam_appl.h>
 #include <security/pam_modules.h>
+#ifndef __APPLE__
 #include <security/pam_ext.h>
+#endif
 
 #include <lua.h>
 #include <lauxlib.h>
@@ -229,10 +231,12 @@ static int lua_pam_set_item(lua_State *L) {
 		/* Needs to code used for pam_conversation in pam_start */
 		return lua_pam_notimplemented(L);
 	}
+#ifdef PAM_FAIL_DELAY
 	else if (item_type == PAM_FAIL_DELAY) {
 		/* Needs a wrapper for delay_fn */
 		return lua_pam_notimplemented(L);
 	}
+#endif
 
 	const char *item_s = luaX_checkstring(L, 3, "item");
 
@@ -365,10 +369,18 @@ int luaopen_pam(lua_State *L) {
 	luaX_setconst(L, pam, PAM_, AUTHTOK);
 	luaX_setconst(L, pam, PAM_, OLDAUTHTOK);
 	luaX_setconst(L, pam, PAM_, CONV);
+#ifdef PAM_FAIL_DELAY
 	luaX_setconst(L, pam, PAM_, FAIL_DELAY);
+#endif
+#ifdef PAM_XDISPLAY
 	luaX_setconst(L, pam, PAM_, XDISPLAY);
+#endif
+#ifdef PAM_XAUTHDATA
 	luaX_setconst(L, pam, PAM_, XAUTHDATA);
+#endif
+#ifdef PAM_AUTHTOK_TYPE
 	luaX_setconst(L, pam, PAM_, AUTHTOK_TYPE);
+#endif
 
 	return 1;
 }
